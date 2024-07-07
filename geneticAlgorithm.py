@@ -9,14 +9,30 @@ of the function f(x) = x * sin(10πx) + 1 within the interval [0,1].
 import random as r
 import math
 
+# Genetic algorithm parameters
 GENERATIONS = 10
 POPULATION_SIZE = 50
 MUTATION_RATE = 0.1
 GENES = 8
 
+'''
+Define the function to be maximized.
+
+Parameters:
+    x (float): The input value
+    
+Returns:
+    float: The output value of the function
+'''
 def function(x):
     return x * math.sin(10 * math.pi * x) + 1
 
+'''
+Generate the initial population of chromosomes.
+
+Returns:
+    list: The initial population of chromosomes
+'''
 def initial_population():
     population = []
     for _ in range(POPULATION_SIZE):
@@ -26,11 +42,30 @@ def initial_population():
         population.append(chromosome)
     return population
 
+'''
+Calculate the fitness of a chromosome.
+
+Parameters:
+    chromosome (str): The chromosome to evaluate
+    
+Returns:
+    float: The fitness value of the chromosome
+'''
 def fitness(chromosome):
     # Convert the chromosome to a decimal number and normalize
     x = int(chromosome, 2) / (2**GENES)
     return function(x)
 
+'''
+Select the best individuals from the population using tournament selection.
+
+Parameters:
+    population (list): The population of chromosomes
+    tournament_size (int): The number of individuals to compete in each tournament
+    
+Returns:
+    list: The selected individuals
+'''
 def tournament_selection(population, tournament_size=3):
     selected = []
     for _ in range(POPULATION_SIZE):
@@ -40,6 +75,16 @@ def tournament_selection(population, tournament_size=3):
         selected.append(best_in_tournament)
     return selected
 
+'''
+Perform crossover between two parent chromosomes.
+
+Parameters:
+    parent1 (str): The first parent chromosome
+    parent2 (str): The second parent chromosome
+    
+Returns:
+    tuple: The two child chromosomes
+'''
 def crossover(parent1, parent2):
     # Random crossover point
     crossover_point = r.randint(1, GENES - 1)
@@ -47,6 +92,15 @@ def crossover(parent1, parent2):
     child2 = parent2[:crossover_point] + parent1[crossover_point:]
     return child1, child2
 
+'''
+Mutate a chromosome by flipping bits with a certain probability.
+
+Parameters:
+    chromosome (str): The chromosome to mutate
+    
+Returns:
+    str: The mutated chromosome
+'''
 def mutation(chromosome):
     mutated_chromosome = ''
     for gene in chromosome:
